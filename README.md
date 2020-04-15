@@ -48,3 +48,31 @@ module "dns" {
   ]
 }
 ```
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| attributes | Additional attributes | `list(string)` | `[]` | no |
+| comment | A comment for the hosted zone. Defaults to 'Managed by Terraform'. | `string` | `""` | no |
+| delegation\_set\_id | The ID of the reusable delegation set whose NS records you want to assign to the hosted zone. Conflicts with vpc as delegation sets can only be used for public zones. | `string` | `""` | no |
+| delimiter | Label delimiter | `string` | `"-"` | no |
+| enable | Whether to enable or disable module | `bool` | `true` | no |
+| environment | Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT' | `string` | `""` | no |
+| force\_destroy | Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone. | `bool` | `true` | no |
+| name | Service name | `any` | n/a | yes |
+| namespace | Service namespace (eg: api, web, ops) | `string` | `""` | no |
+| records | name, ttl, value, weight, mvarp | `any` | n/a | yes |
+| short\_name | Whether to use a short name for service or long (namespace-environment-(stage)-(attributes)-name) | `bool` | `false` | no |
+| stage | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `""` | no |
+| tags | Service tags | `map(string)` | `{}` | no |
+| type | Whether zone is private or public | `string` | `"public"` | no |
+| vpc\_id | n/a | `string` | `""` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| name | n/a |
+| name\_servers | n/a |
+| zone\_id | n/a |
