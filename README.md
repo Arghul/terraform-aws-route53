@@ -11,7 +11,7 @@ This module has a few dependencies:
 Create a zone *arghul.com* with 2 records
 ```hcl-terraform
 module "dns" {
-  source = "../"
+  source = "git::https://github.com/arghul/terraform-aws-route53.git?ref=master"
   name = "arghul.com"
 
   records = [
@@ -20,10 +20,10 @@ module "dns" {
   ]
 }
 ```
-Create a zone *arghul.com* and some records using *weight* attribute for weighted policy routing
+Create a zone *arghul.com* and some records using *weight* attribute for weighted routing policy
 ```hcl-terraform
 module "dns" {
-  source = "../"
+  source = "git::https://github.com/arghul/terraform-aws-route53.git?ref=master"
   name = "arghul.com"
 
   records = [
@@ -34,10 +34,10 @@ module "dns" {
   ]
 }
 ```
-Create a zone *arghul.com* and some records using *mvarp* attribute for multi value policy routing
+Create a zone *arghul.com* and some records using *mvarp* attribute for multi value routing policy
 ```hcl-terraform
 module "dns" {
-  source = "../"
+  source = "git::https://github.com/arghul/terraform-aws-route53.git?ref=master"
   name = "arghul.com"
 
   records = [
