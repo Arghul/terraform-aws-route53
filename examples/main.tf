@@ -8,7 +8,7 @@ provider "aws" {
 
 module "dns" {
   source = "../"
-  name = "arghul.com"
+  name   = "arghul.com"
 
   records = [
     { name = "www", type = "A", ttl = "10", value = "10.0.0.1" },

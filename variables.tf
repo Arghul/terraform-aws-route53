@@ -10,7 +10,7 @@ variable "name" {
 
 variable "namespace" {
   description = "Service namespace (eg: api, web, ops)"
-  default = ""
+  default     = ""
 }
 
 variable "stage" {
@@ -22,7 +22,7 @@ variable "stage" {
 variable "environment" {
   description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
   type        = string
-  default = ""
+  default     = ""
 }
 
 variable "attributes" {
@@ -55,14 +55,14 @@ variable "vpc_id" {
 
 variable "comment" {
   description = "A comment for the hosted zone. Defaults to 'Managed by Terraform'."
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "force_destroy" {
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "delegation_set_id" {
@@ -72,8 +72,8 @@ variable "delegation_set_id" {
 }
 
 variable "type" {
-  type = string
-  default = "public"
+  type        = string
+  default     = "public"
   description = "Whether zone is private or public"
 }
 
