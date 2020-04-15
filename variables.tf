@@ -43,12 +43,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "short_name" {
-  description = "Whether to use a short name for service or long (namespace-environment-(stage)-(attributes)-name)"
-  type        = bool
-  default     = false
-}
-
 variable "vpc_id" {
   default = ""
 }
