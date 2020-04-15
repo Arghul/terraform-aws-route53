@@ -63,7 +63,6 @@ module "dns" {
 | name | Service name | `any` | n/a | yes |
 | namespace | Service namespace (eg: api, web, ops) | `string` | `""` | no |
 | records | name, ttl, value, weight, mvarp | `any` | n/a | yes |
-| short\_name | Whether to use a short name for service or long (namespace-environment-(stage)-(attributes)-name) | `bool` | `false` | no |
 | stage | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `""` | no |
 | tags | Service tags | `map(string)` | `{}` | no |
 | type | Whether zone is private or public | `string` | `"public"` | no |
