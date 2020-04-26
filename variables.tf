@@ -71,6 +71,18 @@ variable "type" {
   description = "Whether zone is private or public"
 }
 
+variable "zone" {
+  type        = string
+  description = "Zone name"
+  default     = ""
+}
+
+variable "default_ttl" {
+  type        = string
+  description = "Default TTL"
+  default     = 5
+}
+
 #
 # name, ttl, value, weight, mvarp
 #

@@ -1,12 +1,11 @@
 locals {
-  name        = module.label.name
-  default_ttl = 5
+  name        = var.zone != "" ? var.zone : module.label.name
 
   records_simple = flatten([
     for record in var.records : [
       {
         name  = record.name
-        ttl   = lookup(record, "ttl", local.default_ttl)
+        ttl   = lookup(record, "ttl", var.default_ttl)
         type  = lookup(record, "type", "A")
         value = record.value
     }] if lookup(record, "mvarp", false) == false && lookup(record, "weight", false) == false
@@ -16,7 +15,7 @@ locals {
     for record in var.records : [
       {
         name  = record.name
-        ttl   = lookup(record, "ttl", local.default_ttl)
+        ttl   = lookup(record, "ttl", var.default_ttl)
         type  = lookup(record, "type", "A")
         value = record.value
     }] if lookup(record, "mvarp", false) == true
@@ -26,7 +25,7 @@ locals {
     for record in var.records : [
       {
         name   = record.name
-        ttl    = lookup(record, "ttl", local.default_ttl)
+        ttl    = lookup(record, "ttl", var.default_ttl)
         type   = lookup(record, "type", "A")
         value  = record.value
         weight = record.weight
@@ -52,7 +51,7 @@ resource "aws_route53_zone" "private" {
   name          = local.name
   comment       = var.comment
   force_destroy = var.force_destroy
-  tags          = module.label.tags
+  tags          = merge(module.label.tags, { "Name" = local.name })
 
   vpc {
     vpc_id = var.vpc_id
@@ -66,7 +65,7 @@ resource "aws_route53_zone" "public" {
   delegation_set_id = var.delegation_set_id
   comment           = var.comment
   force_destroy     = var.force_destroy
-  tags              = module.label.tags
+  tags              = merge(module.label.tags, { "Name" = local.name })
 }
 
 # simple routing policy
