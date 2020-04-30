@@ -1,6 +1,6 @@
 locals {
-  name        = var.zone != "" ? var.zone : module.label.name
-  public_zone_id = var.create_zone  ? concat(aws_route53_zone.public.*.zone_id, [""])[0] : data.aws_route53_zone.zone[0].zone_id
+  name            = var.zone != "" ? var.zone : module.label.name
+  public_zone_id  = var.create_zone ? concat(aws_route53_zone.public.*.zone_id, [""])[0] : data.aws_route53_zone.zone[0].zone_id
   private_zone_id = var.create_zone ? concat(aws_route53_zone.private.*.zone_id, [""])[0] : data.aws_route53_zone.zone[0].zone_id
 
   records_simple = flatten([
@@ -49,7 +49,7 @@ module "label" {
 
 data "aws_route53_zone" "zone" {
   count = var.create_zone == false ? 1 : 0
-  name = local.name
+  name  = local.name
 }
 
 resource "aws_route53_zone" "private" {
@@ -100,7 +100,7 @@ resource "aws_route53_record" "mvarp" {
 # weighted routing policy
 resource "aws_route53_record" "wrp" {
   count          = var.enable && length(local.records_wrp) > 0 ? length(local.records_wrp) : 0
-  zone_id = var.type == "private" ? local.private_zone_id : local.public_zone_id
+  zone_id        = var.type == "private" ? local.private_zone_id : local.public_zone_id
   name           = element(local.records_wrp, count.index).name
   type           = element(local.records_wrp, count.index).type
   ttl            = element(local.records_wrp, count.index).ttl
