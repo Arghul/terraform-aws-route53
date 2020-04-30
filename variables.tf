@@ -77,6 +77,12 @@ variable "zone" {
   default     = ""
 }
 
+variable "create_zone" {
+  type        = bool
+  description = "Whether to create a zone or use existing"
+  default     = true
+}
+
 variable "default_ttl" {
   type        = string
   description = "Default TTL"

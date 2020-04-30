@@ -11,13 +11,29 @@ module "dns" {
   namespace = "arghul"
   environment = "dev"
 
-  name = "dev.arghul.com"
+  type = "public"
+  name = "test.arghul.com"
 
   records = [
     { name = "www", type = "A", ttl = "10", value = "10.0.0.1" },
     { name = "a", type = "A", ttl = "10", value = "10.0.0.10", weight = 10 },
     { name = "a", type = "A", ttl = "10", value = "10.0.0.11", weight = 90 },
     { name = "", type = "MX", value = "10 10.0.0.3" }
+  ]
+
+}
+
+module "dns1" {
+  source = "../"
+  namespace = "arghul"
+  environment = "dev"
+
+  create_zone = false
+
+  name = "dev.arghul.com"
+
+  records = [
+    { name = "www", type = "A", ttl = "10", value = "10.0.0.1" }
   ]
 
 }

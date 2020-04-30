@@ -1,5 +1,7 @@
 locals {
   name        = var.zone != "" ? var.zone : module.label.name
+  public_zone_id = var.create_zone  ? concat(aws_route53_zone.public.*.zone_id, [""])[0] : data.aws_route53_zone.zone[0].zone_id
+  private_zone_id = var.create_zone ? concat(aws_route53_zone.private.*.zone_id, [""])[0] : data.aws_route53_zone.zone[0].zone_id
 
   records_simple = flatten([
     for record in var.records : [
@@ -45,8 +47,13 @@ module "label" {
   regex_replace_chars = "/[^a-zA-Z0-9-.]/"
 }
 
+data "aws_route53_zone" "zone" {
+  count = var.create_zone == false ? 1 : 0
+  name = local.name
+}
+
 resource "aws_route53_zone" "private" {
-  count = var.enable && var.type == "private" ? 1 : 0
+  count = var.enable && var.create_zone && var.type == "private" ? 1 : 0
 
   name          = local.name
   comment       = var.comment
@@ -59,7 +66,7 @@ resource "aws_route53_zone" "private" {
 }
 
 resource "aws_route53_zone" "public" {
-  count = var.enable && var.type == "public" ? 1 : 0
+  count = var.enable && var.create_zone && var.type == "public" ? 1 : 0
 
   name              = local.name
   delegation_set_id = var.delegation_set_id
@@ -71,7 +78,7 @@ resource "aws_route53_zone" "public" {
 # simple routing policy
 resource "aws_route53_record" "simple" {
   count   = var.enable && length(local.records_simple) > 0 ? length(local.records_simple) : 0
-  zone_id = var.type == "private" ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0]
+  zone_id = var.type == "private" ? local.private_zone_id : local.public_zone_id
   name    = element(local.records_simple, count.index).name
   type    = element(local.records_simple, count.index).type
   ttl     = element(local.records_simple, count.index).ttl
@@ -81,7 +88,7 @@ resource "aws_route53_record" "simple" {
 # multivalue answer routing policy
 resource "aws_route53_record" "mvarp" {
   count                            = var.enable && length(local.records_mvarp) > 0 ? length(local.records_mvarp) : 0
-  zone_id                          = var.type == "private" ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0]
+  zone_id                          = var.type == "private" ? local.private_zone_id : local.public_zone_id
   name                             = element(local.records_mvarp, count.index).name
   type                             = element(local.records_mvarp, count.index).type
   ttl                              = element(local.records_mvarp, count.index).ttl
@@ -93,7 +100,7 @@ resource "aws_route53_record" "mvarp" {
 # weighted routing policy
 resource "aws_route53_record" "wrp" {
   count          = var.enable && length(local.records_wrp) > 0 ? length(local.records_wrp) : 0
-  zone_id        = var.type == "private" ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0]
+  zone_id = var.type == "private" ? local.private_zone_id : local.public_zone_id
   name           = element(local.records_wrp, count.index).name
   type           = element(local.records_wrp, count.index).type
   ttl            = element(local.records_wrp, count.index).ttl
